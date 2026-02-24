@@ -1,0 +1,111 @@
+/* External stylesheet for The Enormous Page */
+
+body {
+  width: 2500px;
+  height: 2500px;
+  background-color: #1a1a2e;
+  font-family: 'Courier New', monospace;
+  color: #cccccc;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- ID styling --- */
+#welcome {
+  position: absolute;
+  top: 60px;
+  left: 60px;
+  width: 420px;
+  padding: 30px;
+  border: 2px solid #e94560;
+  background-color: #16213e;
+  text-align: center;
+}
+
+#welcome h1 {
+  font-family: Georgia, serif;
+  font-size: 36px;
+  font-weight: bold;
+  color: #e94560;
+  margin: 0 0 10px 0;
+}
+
+#welcome p {
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* --- Class styling --- */
+.secret {
+  position: absolute;
+  width: 220px;
+  padding: 20px;
+  background-color: #0f3460;
+  border: 1px dashed #e94560;
+  font-size: 13px;
+  font-style: italic;
+  color: #e94560;
+  opacity: 0.6;
+  text-align: left;
+}
+
+.secret:hover {
+  opacity: 1;
+}
+
+.treasure {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  background-color: #1a1a2e;
+  border: 3px solid gold;
+  font-family: Georgia, serif;
+  font-size: 15px;
+  font-weight: bold;
+  color: gold;
+  text-align: center;
+  padding: 40px 15px;
+}
+
+/* --- Span styling --- */
+span.glow {
+  color: #00fff5;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+span.hidden-text {
+  color: #1a1a2e;
+  background-color: #1a1a2e;
+  font-size: 12px;
+}
+
+span.hidden-text:hover {
+  color: #e94560;
+}
+
+/* --- Div styling --- */
+.note-box {
+  position: absolute;
+  width: 280px;
+  padding: 25px;
+  background-color: #16213e;
+  border: 2px solid #00fff5;
+  font-size: 14px;
+  color: #00fff5;
+  text-align: center;
+}
+
+/* --- Image styling --- */
+.pic {
+  position: absolute;
+  border: 3px solid #cccccc;
+  padding: 6px;
+  background-color: #16213e;
+}
+
+.pic img {
+  width: 250px;
+  height: auto;
+}
