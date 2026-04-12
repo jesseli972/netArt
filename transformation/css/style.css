@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f5f5;
+    color: #1a1a1a;
+    text-align: center;
+    padding: 40px;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+#headline {
+    font-size: 40px;
+    font-weight: 300;
+    margin-bottom: 10px;
+    transition: all 0.5s;
+}
+
+#subtext {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+    transition: all 0.5s;
+}
+
+.box {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 30px;
+    margin: 15px auto;
+    max-width: 400px;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.box h2 {
+    margin-bottom: 8px;
+}
+
+#counter {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #999;
+}
