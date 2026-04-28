@@ -28,15 +28,31 @@
 
     <div class="rule"></div>
 
-    <p>You <a href="page4.html">pick the phone back up</a>.</p>
+    <div class="choices choices--waiting">
+      <p class="waiting-note">(you are not ready to choose yet)</p>
 
-    <p>You <a href="page6.html">go to sleep</a> without checking.</p>
+      <p>You <a href="page4.html">pick the phone back up</a>.</p>
+
+      <p>You <a href="page6.html">go to sleep</a> without checking.</p>
+    </div>
 
     <p class="whisper">the house settles<br>the way old things do</p>
 
   </div>
 
   <span class="loc">v&nbsp;/&nbsp;vi</span>
+
+  <script>
+    // The links appear slowly. The prose says an hour goes by; the page
+    // makes you sit with that for a moment before letting you act on it.
+    (function () {
+      const choices = document.querySelector('.choices--waiting');
+      // Reveal after ~6 seconds
+      setTimeout(function () {
+        choices.classList.add('choices--revealed');
+      }, 6000);
+    })();
+  </script>
 
 </body>
 </html>

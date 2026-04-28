@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <div class="page">
+  <div class="page page--checking">
 
     <p class="whisper">checking</p>
 
@@ -30,11 +30,69 @@
 
     <p>You <a href="page6.html">decide it doesn't matter</a> — or practice deciding.</p>
 
-    <p class="whisper">the timestamp says 11:47 pm<br>it says it every time</p>
+    <p class="whisper">the timestamp reads <span id="timestamp">11:47 pm</span><br><span id="timeNote">it has not moved</span></p>
 
   </div>
 
   <span class="loc">iv&nbsp;/&nbsp;vi</span>
+
+  <script>
+    // The page remembers how many times you have come back to it.
+    // Each return makes it a little fainter, and the timestamp drifts forward.
+    (function () {
+      const KEY_CHECKS = 'stillthere_checks';
+      const KEY_ELAPSED = 'stillthere_elapsed';
+
+      let checks = parseInt(localStorage.getItem(KEY_CHECKS) || '0', 10);
+      checks = isNaN(checks) ? 0 : checks;
+      checks += 1;
+      localStorage.setItem(KEY_CHECKS, String(checks));
+
+      // Fade: each revisit drops opacity slightly, floor at 0.35
+      const opacity = Math.max(0.35, 1 - (checks - 1) * 0.06);
+      document.querySelector('.page--checking').style.opacity = opacity;
+
+      // Timestamp drift: starts at 11:47 pm and advances by a small random
+      // number of minutes each return. Cumulative, so it only moves forward.
+      let elapsed = parseInt(localStorage.getItem(KEY_ELAPSED) || '0', 10);
+      elapsed = isNaN(elapsed) ? 0 : elapsed;
+      if (checks > 1) {
+        // Each return after the first adds 1-7 minutes.
+        const step = 1 + Math.floor(Math.random() * 7);
+        elapsed += step;
+        localStorage.setItem(KEY_ELAPSED, String(elapsed));
+      }
+
+      const baseMinutes = 23 * 60 + 47; // 11:47 pm in minutes-since-midnight
+      const totalMinutes = (baseMinutes + elapsed) % (24 * 60);
+      let hours24 = Math.floor(totalMinutes / 60);
+      const mins = totalMinutes % 60;
+
+      // Convert 24-hour to 12-hour with correct am/pm
+      let hours12, suffix;
+      if (hours24 === 0) { hours12 = 12; suffix = 'am'; }
+      else if (hours24 < 12) { hours12 = hours24; suffix = 'am'; }
+      else if (hours24 === 12) { hours12 = 12; suffix = 'pm'; }
+      else { hours12 = hours24 - 12; suffix = 'pm'; }
+
+      const timeStr = hours12 + ':' + (mins < 10 ? '0' : '') + mins + ' ' + suffix;
+      document.getElementById('timestamp').textContent = timeStr;
+
+      // Whisper text changes with how long you have been checking
+      const note = document.getElementById('timeNote');
+      if (checks <= 1) {
+        note.textContent = 'it has not moved';
+      } else if (checks <= 3) {
+        note.textContent = 'a few minutes have passed';
+      } else if (checks <= 6) {
+        note.textContent = "you don't remember when you started";
+      } else if (checks <= 10) {
+        note.textContent = 'the timestamp keeps moving. nothing else does.';
+      } else {
+        note.textContent = 'it is later than you thought';
+      }
+    })();
+  </script>
 
 </body>
 </html>

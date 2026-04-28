@@ -6,7 +6,7 @@
   <title>Reflection — Still There</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="page-final">
 
   <div class="page">
 
@@ -30,13 +30,36 @@
 
     <p class="gap-sm">There is another message now, from someone else, unopened.</p>
 
-    <p>You hold the phone and <a href="index.html">start over</a>.</p>
+    <p>You hold the phone and <a href="index.html" id="restartLink">start over</a>.</p>
 
     <p class="whisper">— still there —</p>
 
   </div>
 
   <span class="loc">vi&nbsp;/&nbsp;vi</span>
+
+  <script>
+    // The page arrives in full color. Then it slowly settles, the warmth
+    // draining out, the way the past does.
+    (function () {
+      // Trigger the drain shortly after page load
+      setTimeout(function () {
+        document.body.classList.add('settled');
+      }, 1500);
+
+      // When the user clicks "start over", clear the stored state
+      // so the rechecking page resets too.
+      const link = document.getElementById('restartLink');
+      if (link) {
+        link.addEventListener('click', function () {
+          try {
+            localStorage.removeItem('stillthere_checks');
+            localStorage.removeItem('stillthere_elapsed');
+          } catch (e) {}
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>

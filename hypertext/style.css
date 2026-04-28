@@ -190,3 +190,113 @@ mark {
 /* ---- spacing helpers ---- */
 .gap { margin-top: 2.5rem; }
 .gap-sm { margin-top: 1rem; }
+
+/* ============================================================
+   FINAL DRAFT ADDITIONS
+   Three behavioral changes, one per page.
+   ============================================================ */
+
+/* ---- page 4 (rechecking) ----
+   Opacity is set inline by JS based on visit count.
+   The transition makes each fade feel gentle, not jarring. */
+.page--checking {
+  transition: opacity 1.2s ease;
+}
+
+/* ---- page 5 (time passes) ----
+   Choices are hidden by default and only revealed after a delay,
+   so the reader actually has to sit with the prose for a moment. */
+.choices--waiting {
+  position: relative;
+}
+
+.choices--waiting > p:not(.waiting-note) {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 1.5s ease, transform 1.5s ease;
+  pointer-events: none;
+}
+
+.choices--waiting .waiting-note {
+  font-size: 0.72rem;
+  color: var(--faint);
+  font-style: italic;
+  letter-spacing: 0.03em;
+  transition: opacity 1.2s ease;
+  margin-bottom: 1.4rem;
+}
+
+.choices--revealed .waiting-note {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.choices--revealed > p:not(.waiting-note) {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ---- page 6 (final, color drains) ----
+   Page arrives warm. After a beat, the body picks up the .settled class
+   and the warmth slowly leaves: paper turns paler, ink softens, the
+   accent line dims. The text stays readable. */
+
+/* The base background lives on html, so we transition html when the
+   final page is active. */
+html:has(body.page-final) {
+  transition: background 18s ease;
+}
+html:has(body.page-final.settled) {
+  background: #ecead0;
+}
+
+.page-final .page,
+.page-final h1,
+.page-final h2,
+.page-final p,
+.page-final mark,
+.page-final .rule,
+.page-final .loc,
+.page-final a {
+  transition: color 18s ease, background 18s ease,
+              border-color 18s ease, text-decoration-color 18s ease;
+}
+
+/* When settled, override the active color variables for this page only.
+   Cascading these onto specific elements keeps the transition smooth. */
+.page-final.settled h1,
+.page-final.settled h2,
+.page-final.settled p {
+  color: #6a6258;
+}
+
+.page-final.settled p.small,
+.page-final.settled p.whisper {
+  color: #b8b1a3;
+}
+
+.page-final.settled mark {
+  border-bottom-color: #d4cdb8;
+}
+
+.page-final.settled .rule {
+  background: #d4cdb8;
+}
+
+.page-final.settled a {
+  color: #6a6258;
+  text-decoration-color: #cbc2af;
+}
+
+.page-final.settled a:hover {
+  color: #4a443c;
+  text-decoration-color: #6a6258;
+}
+
+.page-final.settled .loc {
+  color: #c8c0ad;
+}
