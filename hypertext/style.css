@@ -178,13 +178,17 @@ a:hover {
   text-decoration: none;
 }
 
-/* ---- mark ---- */
+/* ---- mark ----
+   A soft warm-paper highlight, distinct from the link underline.
+   The phrase reads as marginalia or pencil emphasis, not as something clickable. */
 
 mark {
-  background: transparent;
-  border-bottom: 2px solid var(--faint);
+  background: rgba(180, 140, 90, 0.13);
   color: inherit;
-  padding-bottom: 1px;
+  padding: 0.05em 0.18em;
+  border-radius: 1px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 /* ---- spacing helpers ---- */
@@ -198,9 +202,23 @@ mark {
 
 /* ---- page 4 (rechecking) ----
    Opacity is set inline by JS based on visit count.
-   The transition makes each fade feel gentle, not jarring. */
+   The transition makes each fade feel gentle, not jarring.
+   Baseline starts slightly heavier than other pages so the fade
+   reads more clearly against full opacity. */
 .page--checking {
   transition: opacity 1.2s ease;
+}
+.page--checking p,
+.page--checking h2 {
+  color: #0f0e0d;
+  font-weight: 400;
+}
+.page--checking .loud {
+  font-weight: 600;
+}
+.page--checking p.small,
+.page--checking p.whisper {
+  color: #5a544f;
 }
 
 /* ---- page 5 (time passes) ----
@@ -223,10 +241,39 @@ mark {
   font-style: italic;
   letter-spacing: 0.03em;
   transition: opacity 1.2s ease;
-  margin-bottom: 1.4rem;
+  margin-bottom: 0.8rem;
 }
 
-.choices--revealed .waiting-note {
+.waiting-dots {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
+  transition: opacity 1.2s ease;
+}
+
+.waiting-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--faint);
+  animation: dot-pulse 2.2s ease-in-out infinite;
+}
+
+.waiting-dots span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.waiting-dots span:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50%      { opacity: 0.85; transform: scale(1.2); }
+}
+
+.choices--revealed .waiting-note,
+.choices--revealed .waiting-dots {
   opacity: 0;
   pointer-events: none;
   height: 0;
@@ -280,7 +327,7 @@ html:has(body.page-final.settled) {
 }
 
 .page-final.settled mark {
-  border-bottom-color: #d4cdb8;
+  background: rgba(140, 110, 70, 0.10);
 }
 
 .page-final.settled .rule {
@@ -299,4 +346,88 @@ html:has(body.page-final.settled) {
 
 .page-final.settled .loc {
   color: #c8c0ad;
+}
+
+/* ---- detour pages ---- */
+
+/* draft page: a soft inset block holding the unsent attempts */
+.draft-box {
+  margin: 2rem 0 2rem;
+  padding: 1.5rem 1.6rem 1.2rem;
+  border-left: 1px solid var(--faint);
+  background: rgba(0, 0, 0, 0.02);
+  position: relative;
+}
+
+.draft-line {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--dim);
+  margin-bottom: 0.4rem;
+  line-height: 1.55;
+}
+
+.draft-line s {
+  text-decoration-color: var(--dim);
+  text-decoration-thickness: 1px;
+}
+
+.draft-line--final {
+  margin-top: 1rem;
+  font-style: normal;
+  color: var(--ink);
+  margin-bottom: 0;
+  display: inline-block;
+}
+
+.draft-cursor {
+  display: inline-block;
+  font-family: 'Source Serif 4', serif;
+  font-weight: 300;
+  color: var(--ink);
+  margin-left: 0.15rem;
+  font-size: 0.95rem;
+  animation: cursor-blink 1.1s steps(2) infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ---- mobile ----
+   Tighter padding, smaller heading scale, and a less obtrusive
+   location indicator on narrow screens. */
+@media (max-width: 600px) {
+  html { font-size: 17px; }
+
+  body {
+    padding: 2.5rem 1.4rem 5rem;
+  }
+
+  h1 {
+    font-size: 1.65rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  p.loud {
+    font-size: 1.4rem;
+  }
+
+  p.large {
+    font-size: 1.15rem;
+  }
+
+  .loc {
+    bottom: 1rem;
+    right: 1.2rem;
+    font-size: 0.62rem;
+  }
+
+  .draft-box {
+    padding: 1.2rem 1.2rem 1rem;
+  }
 }

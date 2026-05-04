@@ -29,7 +29,10 @@
     <div class="rule"></div>
 
     <div class="choices choices--waiting">
-      <p class="waiting-note">(you are not ready to choose yet)</p>
+      <p class="waiting-note">(the choices will appear when the time has passed)</p>
+      <div class="waiting-dots" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
 
       <p>You <a href="page4.html">pick the phone back up</a>.</p>
 
@@ -44,13 +47,14 @@
 
   <script>
     // The links appear slowly. The prose says an hour goes by; the page
-    // makes you sit with that for a moment before letting you act on it.
+    // makes you sit with that for a longer moment before letting you act on it.
     (function () {
       const choices = document.querySelector('.choices--waiting');
-      // Reveal after ~6 seconds
+      // Reveal after 12 seconds. The waiting note and dots make it clear
+      // that the page is intentionally pausing, not broken.
       setTimeout(function () {
         choices.classList.add('choices--revealed');
-      }, 6000);
+      }, 12000);
     })();
   </script>
 
