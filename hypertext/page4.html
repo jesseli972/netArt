@@ -38,31 +38,51 @@
 
   <script>
     // The page remembers how many times you have come back to it.
-    // Each return makes it a little fainter, and the timestamp drifts forward.
+    // Each return makes it visibly fainter, and the timestamp drifts forward.
     (function () {
       const KEY_CHECKS = 'stillthere_checks';
       const KEY_ELAPSED = 'stillthere_elapsed';
 
-      let checks = parseInt(localStorage.getItem(KEY_CHECKS) || '0', 10);
+      // Storage with fallback: try localStorage, fall back to sessionStorage,
+      // fall back to a window-level object so the script never silently fails.
+      let store;
+      try {
+        localStorage.setItem('__stillthere_test', '1');
+        localStorage.removeItem('__stillthere_test');
+        store = localStorage;
+      } catch (e) {
+        try {
+          sessionStorage.setItem('__stillthere_test', '1');
+          sessionStorage.removeItem('__stillthere_test');
+          store = sessionStorage;
+        } catch (e2) {
+          window.__stillthereStore = window.__stillthereStore || {};
+          store = {
+            getItem: (k) => window.__stillthereStore[k] || null,
+            setItem: (k, v) => { window.__stillthereStore[k] = v; },
+            removeItem: (k) => { delete window.__stillthereStore[k]; }
+          };
+        }
+      }
+
+      let checks = parseInt(store.getItem(KEY_CHECKS) || '0', 10);
       checks = isNaN(checks) ? 0 : checks;
       checks += 1;
-      localStorage.setItem(KEY_CHECKS, String(checks));
+      store.setItem(KEY_CHECKS, String(checks));
 
-      // Fade: each revisit drops opacity more substantially, floor at 0.30.
-      // The .page--checking baseline is set slightly heavier in CSS so that
-      // even a 1-2 visit difference reads as "this got fainter."
+      // Fade: 10% drop per visit, floor at 0.30. Each return softens
+      // the page a little; the CSS transition makes the change gentle.
       const opacity = Math.max(0.30, 1 - (checks - 1) * 0.10);
       document.querySelector('.page--checking').style.opacity = opacity;
 
       // Timestamp drift: starts at 11:47 pm and advances by a small random
       // number of minutes each return. Cumulative, so it only moves forward.
-      let elapsed = parseInt(localStorage.getItem(KEY_ELAPSED) || '0', 10);
+      let elapsed = parseInt(store.getItem(KEY_ELAPSED) || '0', 10);
       elapsed = isNaN(elapsed) ? 0 : elapsed;
       if (checks > 1) {
-        // Each return after the first adds 1-7 minutes.
         const step = 1 + Math.floor(Math.random() * 7);
         elapsed += step;
-        localStorage.setItem(KEY_ELAPSED, String(elapsed));
+        store.setItem(KEY_ELAPSED, String(elapsed));
       }
 
       const baseMinutes = 23 * 60 + 47; // 11:47 pm in minutes-since-midnight
@@ -78,20 +98,23 @@
       else { hours12 = hours24 - 12; suffix = 'pm'; }
 
       const timeStr = hours12 + ':' + (mins < 10 ? '0' : '') + mins + ' ' + suffix;
-      document.getElementById('timestamp').textContent = timeStr;
+      const tsEl = document.getElementById('timestamp');
+      if (tsEl) tsEl.textContent = timeStr;
 
       // Whisper text changes with how long you have been checking
       const note = document.getElementById('timeNote');
-      if (checks <= 1) {
-        note.textContent = 'it has not moved';
-      } else if (checks <= 3) {
-        note.textContent = 'a few minutes have passed';
-      } else if (checks <= 6) {
-        note.textContent = "you don't remember when you started";
-      } else if (checks <= 10) {
-        note.textContent = 'the timestamp keeps moving. nothing else does.';
-      } else {
-        note.textContent = 'it is later than you thought';
+      if (note) {
+        if (checks <= 1) {
+          note.textContent = 'it has not moved';
+        } else if (checks <= 3) {
+          note.textContent = 'a few minutes have passed';
+        } else if (checks <= 6) {
+          note.textContent = "you don't remember when you started";
+        } else if (checks <= 10) {
+          note.textContent = 'the timestamp keeps moving. nothing else does.';
+        } else {
+          note.textContent = 'it is later than you thought';
+        }
       }
     })();
   </script>

@@ -201,11 +201,15 @@ mark {
    ============================================================ */
 
 /* ---- page 4 (rechecking) ----
-   Opacity is set inline by JS based on visit count.
-   The transition makes each fade feel gentle, not jarring.
+   Opacity and blur are set inline by JS based on visit count.
+   The appear animation is disabled here because its 'forwards' fill
+   would override the inline opacity. The transition still applies
+   smoothly when the user navigates back to the page.
    Baseline starts slightly heavier than other pages so the fade
    reads more clearly against full opacity. */
 .page--checking {
+  animation: none;
+  opacity: 1;
   transition: opacity 1.2s ease;
 }
 .page--checking p,
